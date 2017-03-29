@@ -1,3 +1,16 @@
 <resources>
+    <!--
+        Localizing Strings: It is a good idea to place all your strings here.
+        Note that strings are immutable in Java. Hence, passing a string to
+        a method directly creates a new object every time. This is bad for users.
+        Localizing them in strings.xml creates a single object.
+    -->
     <string name="app_name">SecurePhonebook</string>
+
+    <!--
+        Strings required for RSAHelper.
+    -->
+    <string name="encryption_algorithm">RSA</string>
+    <string name="private_key_filename">private.key</string>
+    <string name="public_key_filename">public.key</string>
 </resources>
