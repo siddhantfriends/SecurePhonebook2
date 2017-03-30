@@ -36,8 +36,6 @@ public class EncryptionHelper implements Constants {
     private Context context;
     protected SecretKey secretKey;
     private Cipher cipher;
-    private byte[] plainText;
-    private byte[] cipherText;
 
     /**
      * Constructor helps to generate a secret key and stores it on external storage.
@@ -49,6 +47,9 @@ public class EncryptionHelper implements Constants {
 
         // generating the secret key
         generateSecretKey();
+
+        // write the secret key to external storage device
+        
     }
 
     protected void generateSecretKey() {
@@ -75,15 +76,28 @@ public class EncryptionHelper implements Constants {
         }
     }
 
-    protected void storeSecretKey() {
-
+    /**
+     * Writing the secret key to external storage.
+     * @param secretKey - Secret key used for encryption and decryption.
+     * @param filename - Filename in which the key will be stored.
+     */
+    protected void storeSecretKey(SecretKey secretKey, String filename) {
+        FileOutputStream outputStream;
+        try {
+            // writing the secret key to the external storage.
+            outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(secretKey.getEncoded());
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Encrypts the given text and returns the cipher text in a string format.
-     * @param text - The text to be encrypted.
-     * @param secretKey - the secret key required for encryption.
-     * @return - Cipher text or null if something went wrong.
+     * Encrypts the given text and returns the cipher text in a byte[] format. Provided the secret key.
+     * @param text - The text to be encrypted in byte[] format.
+     * @param secretKey - Secret key required for encryption.
+     * @return - Cipher text in byte[] format or null if something went wrong.
      */
     protected byte[] onEcrypt(byte[] text, SecretKey secretKey) {
         // init cipher to encrypt mode
@@ -95,7 +109,7 @@ public class EncryptionHelper implements Constants {
 
         if (cipher != null) {
             // encryption
-            cipherText = null;
+            byte[] cipherText = null;
             try {
                 cipherText = cipher.doFinal(text);
             } catch (IllegalBlockSizeException | BadPaddingException e) {
@@ -111,10 +125,10 @@ public class EncryptionHelper implements Constants {
     }
 
     /**
-     * Decrypts the given cipher text to a text. Provided the secret key.
-     * @param cipherText - Cipher text to be decrypted.
+     * Decrypts the given cipher text to a text in byte[] format. Provided the secret key.
+     * @param cipherText - Cipher text to be decrypted in byte[] format.
      * @param secretKey - The scret key required for decryption.
-     * @return - Decrypted text or null if something went wrong.
+     * @return - Decrypted text in byte[] format or null if something went wrong.
      */
     protected  byte[] onDecrypt(byte[] cipherText, SecretKey secretKey) {
         // init cipher to decrypt mode
@@ -126,7 +140,7 @@ public class EncryptionHelper implements Constants {
 
         if (cipher != null) {
             // decryption
-            plainText = null;
+            byte[] plainText = null;
             try {
                 plainText = cipher.doFinal(cipherText);
             } catch (IllegalBlockSizeException | BadPaddingException e) {
