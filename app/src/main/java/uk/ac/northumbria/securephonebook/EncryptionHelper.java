@@ -27,6 +27,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Siddhant on 29/03/2017.
@@ -35,7 +36,6 @@ import javax.crypto.SecretKey;
 public class EncryptionHelper implements Constants {
     private Context context;
     protected SecretKey secretKey;
-    private Cipher cipher;
 
     /**
      * Constructor helps to generate a secret key and stores it on external storage.
@@ -45,14 +45,30 @@ public class EncryptionHelper implements Constants {
         // initializing
         this.context = context;
 
-        // generating the secret key
-        generateSecretKey();
-
-        // write the secret key to external storage device
-        
+        if (secretKeyExists(SECRET_KEY_FILENAME)) {
+            secretKey = readSecretKey(SECRET_KEY_FILENAME);
+        } else {
+            secretKey = generateSecretKey();
+            storeSecretKey(secretKey, SECRET_KEY_FILENAME);
+        }
     }
 
-    protected void generateSecretKey() {
+    /**
+     * Checks whether the secret.key file exists.
+     * @return - returns true if the file exists else returns false.
+     */
+    protected boolean secretKeyExists(String filename) {
+        File file = context.getFileStreamPath(filename);
+        return file.exists() && file.isFile();
+    }
+
+
+    /**
+     * Generates an instance of SecretKey.
+     * @return - returns the generated SecretKey, if something is wrong null is returned.
+     */
+    protected SecretKey generateSecretKey() {
+        SecretKey secretKey = null;
         KeyGenerator keyGenerator = null;
         try {
             // get the instance of the keygenerator with the specified algorithm
@@ -67,13 +83,7 @@ public class EncryptionHelper implements Constants {
             secretKey = keyGenerator.generateKey();
         }
 
-        // getting the instance of cipher
-        cipher = null;
-        try {
-            cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
+        return secretKey;
     }
 
     /**
@@ -94,18 +104,70 @@ public class EncryptionHelper implements Constants {
     }
 
     /**
+     * Takes the filename for secret.key and returns the instance of SecretKey.
+     * @param filename - The filename for the secret.key stored in the files directory.
+     * @return - SecretKey instance for the given secret.key file.
+     */
+    protected  SecretKey readSecretKey(String filename) {
+        SecretKey secretKey = null;
+        FileInputStream fileIn = null;
+        try {
+            fileIn = new FileInputStream(context.getFilesDir() + File.separator + filename);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (fileIn != null) {
+            byte[] data = null;
+
+            try {
+                data = new byte[fileIn.available()];
+                fileIn.read(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (data != null) {
+                // Create the key from the byte array
+                secretKey = new SecretKeySpec(data, 0, data.length, ENCRYPTION_ALGORITHM);
+            }
+        }
+        return secretKey;
+    }
+
+    /**
+     * Returns an instance of cipher to encrypt or decrypt using the secret key.
+     * @param mode - Cipher.ENCRYPT_MODE or Cipher.DECRYPT_MODE should be provided.
+     * @param secretKey - Secret key used for encryption or decryption.
+     * @return - Returns an instance of Cipher for encrypting or decrypting as supplied by the mode parameter.
+     */
+    protected Cipher getInstanceOfCipher(int mode, SecretKey secretKey) {
+        // getting the instance of cipher
+        Cipher cipher = null;
+        try {
+            cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+
+        // init cipher to either encrypt or decrypt mode
+        try {
+            cipher.init(mode, secretKey);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+
+        return cipher;
+    }
+
+    /**
      * Encrypts the given text and returns the cipher text in a byte[] format. Provided the secret key.
      * @param text - The text to be encrypted in byte[] format.
      * @param secretKey - Secret key required for encryption.
      * @return - Cipher text in byte[] format or null if something went wrong.
      */
     protected byte[] onEcrypt(byte[] text, SecretKey secretKey) {
-        // init cipher to encrypt mode
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
+        Cipher cipher = getInstanceOfCipher(Cipher.ENCRYPT_MODE, secretKey);
 
         if (cipher != null) {
             // encryption
@@ -131,12 +193,7 @@ public class EncryptionHelper implements Constants {
      * @return - Decrypted text in byte[] format or null if something went wrong.
      */
     protected  byte[] onDecrypt(byte[] cipherText, SecretKey secretKey) {
-        // init cipher to decrypt mode
-        try {
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
+        Cipher cipher = getInstanceOfCipher(Cipher.DECRYPT_MODE, secretKey);
 
         if (cipher != null) {
             // decryption
