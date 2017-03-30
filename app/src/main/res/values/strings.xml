@@ -6,11 +6,6 @@
         Localizing them in strings.xml creates a single object.
     -->
     <string name="app_name">SecurePhonebook</string>
-
-    <!--
-        Strings required for RSAHelper.
-    -->
-    <string name="encryption_algorithm">RSA</string>
-    <string name="private_key_filename">private.key</string>
-    <string name="public_key_filename">public.key</string>
+    <string name="encrypt">Encrypt</string>
+    <string name="decrypt">Decrypt</string>
 </resources>
