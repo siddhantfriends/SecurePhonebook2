@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import uk.ac.northumbria.securephonebook.models.Contact;
+
 /**
  * This class is necessary for displaying records in the ListView.
  * Created by Siddhant on 30/03/2017.

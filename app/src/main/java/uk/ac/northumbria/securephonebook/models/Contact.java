@@ -1,4 +1,4 @@
-package uk.ac.northumbria.securephonebook;
+package uk.ac.northumbria.securephonebook.models;
 
 /**
  * Created by Siddhant on 30/03/2017.

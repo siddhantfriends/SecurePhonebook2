@@ -6,6 +6,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import uk.ac.northumbria.securephonebook.helpers.DatabaseHelper;
+import uk.ac.northumbria.securephonebook.models.Contact;
+
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper db;

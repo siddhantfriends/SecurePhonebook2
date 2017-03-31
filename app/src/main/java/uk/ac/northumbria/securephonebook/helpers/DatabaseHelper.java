@@ -1,4 +1,4 @@
-package uk.ac.northumbria.securephonebook;
+package uk.ac.northumbria.securephonebook.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+
+import uk.ac.northumbria.securephonebook.models.Contact;
+import uk.ac.northumbria.securephonebook.schemas.DBContract;
 
 /**
  * Created by Siddhant on 30/03/2017.

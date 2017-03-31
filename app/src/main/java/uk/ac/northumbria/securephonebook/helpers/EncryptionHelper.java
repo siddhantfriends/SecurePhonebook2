@@ -1,4 +1,4 @@
-package uk.ac.northumbria.securephonebook;
+package uk.ac.northumbria.securephonebook.helpers;
 
 import android.content.Context;
 import android.os.Environment;
@@ -28,6 +28,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import uk.ac.northumbria.securephonebook.Constants;
 
 /**
  * Created by Siddhant on 29/03/2017.
