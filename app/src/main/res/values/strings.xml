@@ -5,7 +5,5 @@
         a method directly creates a new object every time. This is bad for users.
         Localizing them in strings.xml creates a single object.
     -->
-    <string name="app_name">SecurePhonebook</string>
-    <string name="encrypt">Encrypt</string>
-    <string name="decrypt">Decrypt</string>
+    <string name="app_name">Secure Phonebook</string>
 </resources>
