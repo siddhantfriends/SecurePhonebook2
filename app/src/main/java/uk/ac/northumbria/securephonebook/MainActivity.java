@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import uk.ac.northumbria.securephonebook.models.Contact;
 public class MainActivity extends AppCompatActivity implements Constants {
     FloatingActionButton addContactButton;
     ListView contactsListView;
+    SearchView searchView;
+    Button searchButton;
     DatabaseHelper db;
 
     @Override
@@ -27,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
         // initializing
         contactsListView = (ListView) findViewById(R.id.contactsListView);
         addContactButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        searchView = (SearchView) findViewById(R.id.searchView);
+        searchButton = (Button) findViewById(R.id.searchButton);
+        db = new DatabaseHelper(getApplicationContext());
 
         // setting listeners
         contactsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -48,15 +55,31 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 startActivityForResult(intent, ADD_CONTACT_ACTIVITY_REQUEST);
             }
         });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                updateQuery(query);
+                return true;
+            }
 
-        updateContactsView();
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                updateQuery(newText);
+                return true;
+            }
+        });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateQuery(searchView.getQuery().toString());
+            }
+        });
+
+
+        updateContactsView(db.getAllContacts());
     }
 
-    private void updateContactsView() {
-        db = new DatabaseHelper(getApplicationContext());
-
-        ArrayList<Contact> contacts = db.retrieveAllContacts();
-
+    private void updateContactsView(ArrayList<Contact> contacts) {
         contactsListView.setAdapter(new ContentAdapter(getApplicationContext(), contacts));
     }
 
@@ -68,11 +91,19 @@ public class MainActivity extends AppCompatActivity implements Constants {
             // checking of the request was successful
             if (resultCode == RESULT_OK) {
                 // refresh the adapter
-                updateContactsView();
+                updateContactsView(db.getAllContacts());
 
                 // display success message
                 Toast.makeText(getApplicationContext(), "The contact was saved successfully", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void updateQuery(String query) {
+        if (query.trim().isEmpty()) {
+            updateContactsView(db.getAllContacts());
+        } else {
+            updateContactsView(db.getContactsSearchResult(query.trim().toLowerCase()));
         }
     }
 }

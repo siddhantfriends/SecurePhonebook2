@@ -6,6 +6,7 @@ package uk.ac.northumbria.securephonebook.models;
 
 public class Contact {
 
+    private int id;             // id as mentioned in the database
     private String firstName;   // First name of the contact
     private String lastName;    // Last name of the contact
     private String email;       // Email of the contact
@@ -18,11 +19,17 @@ public class Contact {
      * @param email - Email of the contact.
      * @param number - Number of the contact.
      */
-    public Contact(String firstName, String lastName, String email, String number) {
+    public Contact(int id, String firstName, String lastName, String email, String number) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.number = number;
+    }
+
+
+    public int getId() {
+        return id;
     }
 
     /**
@@ -64,6 +71,19 @@ public class Contact {
     @Override
     public String toString() {
         return firstName + " " + lastName + "\n" + email;
+    }
+
+    /**
+     * This method returns if the searched text is available in first name, last name or email.
+     * @param text - The text to find in first name, last name, email.
+     * @return - Returns true if the text exists else false.
+     */
+    public boolean findInContact(String text) {
+
+        return (firstName.toLowerCase().contains(text) ||
+                lastName.toLowerCase().contains(text) ||
+                email.toLowerCase().contains(text) ||
+                (firstName + " " + lastName).toLowerCase().contains(text));
     }
 
 }

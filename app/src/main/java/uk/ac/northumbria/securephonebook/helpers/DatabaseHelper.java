@@ -105,13 +105,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Retrieves all the contacts in ArrayList<Contact> format.
      * @return - returns ArrayList of Contact.
      */
-    public ArrayList<Contact> retrieveAllContacts() {
+    public ArrayList<Contact> getAllContacts() {
         // getting readable database
         SQLiteDatabase db = this.getReadableDatabase();
 
         // retrieve all records
         Cursor cursor = db.query(DBContract.ContactContract.TABLE_NAME, allColumns, null, null, null, null, DBContract.ContactContract._ID);
         int[] columnIndices = {
+                cursor.getColumnIndexOrThrow(DBContract.ContactContract._ID),
                 cursor.getColumnIndexOrThrow(DBContract.ContactContract.COLUMN_FIRST_NAME),
                 cursor.getColumnIndexOrThrow(DBContract.ContactContract.COLUMN_LAST_NAME),
                 cursor.getColumnIndexOrThrow(DBContract.ContactContract.COLUMN_EMAIL),
@@ -125,12 +126,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             while (!cursor.isAfterLast()) {
                 // reading cipher text from database and converting to plain text byte array
                 // in other words, decrypting the contacts while retrieving them.
-                byte[] firstName = edHelper.onDecrypt(cursor.getBlob(columnIndices[0]), edHelper.secretKey);
-                byte[] lastName = edHelper.onDecrypt(cursor.getBlob(columnIndices[1]), edHelper.secretKey);
-                byte[] email = edHelper.onDecrypt(cursor.getBlob(columnIndices[2]), edHelper.secretKey);
-                byte[] number = edHelper.onDecrypt(cursor.getBlob(columnIndices[3]), edHelper.secretKey);
+                int id = cursor.getInt(columnIndices[0]);
+                byte[] firstName = edHelper.onDecrypt(cursor.getBlob(columnIndices[1]), edHelper.secretKey);
+                byte[] lastName = edHelper.onDecrypt(cursor.getBlob(columnIndices[2]), edHelper.secretKey);
+                byte[] email = edHelper.onDecrypt(cursor.getBlob(columnIndices[3]), edHelper.secretKey);
+                byte[] number = edHelper.onDecrypt(cursor.getBlob(columnIndices[4]), edHelper.secretKey);
 
-                Contact contact =  new Contact(new String(firstName), new String(lastName), new String(email), new String(number));
+                Contact contact =  new Contact(id, new String(firstName), new String(lastName), new String(email), new String(number));
 
                 contacts.add(contact);
                 cursor.moveToNext();
@@ -146,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * added to the table.
      */
     private void findDataOrInsertData() {
-        ArrayList<Contact> contacts = this.retrieveAllContacts();
+        ArrayList<Contact> contacts = this.getAllContacts();
         // if the database does not have data then insert data
         if (contacts.size() < 1) {
             // This is total of 10 contacts
@@ -161,6 +163,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             this.insertContact("Brandon", "Bryant", "BrandonBryant@armyspy.com", "07081320441");
             this.insertContact("James", "Metcalfe", "JamesMetcalfe@dayrep.com", "07975429676");
         }
+    }
+
+    /**
+     * Searches over all the contacts for first name, last name, email.
+     * The matches are returned in ArrayList<Contact>
+     * @param search - The text to search.
+     * @return - Returns ArrayList<Contact> of the matched results.
+     */
+    public ArrayList<Contact> getContactsSearchResult(String search) {
+        ArrayList<Contact> contacts = getAllContacts();
+        ArrayList<Contact> searchResults = new ArrayList<>();
+
+        for (Contact contact : contacts) {
+            if (contact.findInContact(search)) {
+                searchResults.add(contact);
+            }
+        }
+
+        return searchResults;
     }
 
 
