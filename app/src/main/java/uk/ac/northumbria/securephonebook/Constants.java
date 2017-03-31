@@ -5,7 +5,9 @@ package uk.ac.northumbria.securephonebook;
  */
 
 public interface Constants {
-    final String ENCRYPTION_ALGORITHM  = "AES";
-    final int ENCRYPTION_KEY_SIZE = 256;
-    final String SECRET_KEY_FILENAME = "secret.key";
+    static final String ENCRYPTION_ALGORITHM  = "AES";
+    static final int ENCRYPTION_KEY_SIZE = 256;
+    static final String SECRET_KEY_FILENAME = "secret.key";
+
+    static final int ADD_CONTACT_ACTIVITY_REQUEST = 1;
 }
