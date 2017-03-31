@@ -10,4 +10,5 @@ public interface Constants {
     static final String SECRET_KEY_FILENAME = "secret.key";
 
     static final int ADD_CONTACT_ACTIVITY_REQUEST = 1;
+    static final int RC_LOCATION_CONTACTS_PERM = 2;
 }

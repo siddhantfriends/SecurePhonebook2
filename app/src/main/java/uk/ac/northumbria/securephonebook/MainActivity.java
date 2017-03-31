@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -14,7 +15,7 @@ import uk.ac.northumbria.securephonebook.helpers.DatabaseHelper;
 import uk.ac.northumbria.securephonebook.models.Contact;
 
 public class MainActivity extends AppCompatActivity implements Constants {
-
+    FloatingActionButton addContactButton;
     ListView contactsListView;
     DatabaseHelper db;
 
@@ -23,8 +24,23 @@ public class MainActivity extends AppCompatActivity implements Constants {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // initializing
         contactsListView = (ListView) findViewById(R.id.contactsListView);
-        FloatingActionButton addContactButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        addContactButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+
+        // setting listeners
+        contactsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contact contact = (Contact) parent.getItemAtPosition(position);
+                Intent intent = new Intent(getApplicationContext(), ViewContactActivity.class);
+                intent.putExtra("first_name", contact.getFirstName());
+                intent.putExtra("last_name", contact.getLastName());
+                intent.putExtra("email", contact.getEmail());
+                intent.putExtra("number", contact.getNumber());
+                startActivity(intent);
+            }
+        });
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -44,9 +44,14 @@ public class ContentAdapter extends BaseAdapter {
         return contacts.size();
     }
 
+    /**
+     * Returns the item at the position.
+     * @param position - position of the item passed by the parent class.
+     * @return returns the Contact.
+     */
     @Override
     public Object getItem(int position) {
-        return null;
+        return contacts.get(position);
     }
 
     @Override
