@@ -20,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database version requires to increment if the schema is changed.
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "SecurePhonebook.db";   // Name of the database
+    private EncryptionHelper edHelper;
 
     // Query for creating the table
     private static final String SQL_CREATE_CONTACTS_TABLE =
@@ -48,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        edHelper = new EncryptionHelper(context);
         this.findDataOrInsertData();
     }
 
@@ -84,11 +86,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Mapping the new values with the column names being the keys.
+        // encrypting the contacts while adding them to the database.
         ContentValues values = new ContentValues();
-        values.put(DBContract.ContactContract.COLUMN_FIRST_NAME, firstName.getBytes());
-        values.put(DBContract.ContactContract.COLUMN_LAST_NAME, lastName.getBytes());
-        values.put(DBContract.ContactContract.COLUMN_EMAIL, email.getBytes());
-        values.put(DBContract.ContactContract.COLUMN_NUMBER, number.getBytes());
+        values.put(DBContract.ContactContract.COLUMN_FIRST_NAME,
+                edHelper.onEncrypt(firstName.getBytes(), edHelper.secretKey));
+        values.put(DBContract.ContactContract.COLUMN_LAST_NAME,
+                edHelper.onEncrypt(lastName.getBytes(), edHelper.secretKey));
+        values.put(DBContract.ContactContract.COLUMN_EMAIL,
+                edHelper.onEncrypt(email.getBytes(), edHelper.secretKey));
+        values.put(DBContract.ContactContract.COLUMN_NUMBER,
+                edHelper.onEncrypt(number.getBytes(), edHelper.secretKey));
 
         // Inserting the record into database
         db.insert(DBContract.ContactContract.TABLE_NAME, null, values);
@@ -116,10 +123,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Retrieves all the records and adds them to ArrayList
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                Contact contact =  new Contact(new String(cursor.getBlob(columnIndices[0])),
-                        new String(cursor.getBlob(columnIndices[1])),
-                        new String(cursor.getBlob(columnIndices[2])),
-                        new String(cursor.getBlob(columnIndices[3])));
+                // reading cipher text from database and converting to plain text byte array
+                // in other words, decrypting the contacts while retrieving them.
+                byte[] firstName = edHelper.onDecrypt(cursor.getBlob(columnIndices[0]), edHelper.secretKey);
+                byte[] lastName = edHelper.onDecrypt(cursor.getBlob(columnIndices[1]), edHelper.secretKey);
+                byte[] email = edHelper.onDecrypt(cursor.getBlob(columnIndices[2]), edHelper.secretKey);
+                byte[] number = edHelper.onDecrypt(cursor.getBlob(columnIndices[3]), edHelper.secretKey);
+
+                Contact contact =  new Contact(new String(firstName), new String(lastName), new String(email), new String(number));
 
                 contacts.add(contact);
                 cursor.moveToNext();

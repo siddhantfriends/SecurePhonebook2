@@ -168,7 +168,7 @@ public class EncryptionHelper implements Constants {
      * @param secretKey - Secret key required for encryption.
      * @return - Cipher text in byte[] format or null if something went wrong.
      */
-    protected byte[] onEcrypt(byte[] text, SecretKey secretKey) {
+    protected byte[] onEncrypt(byte[] text, SecretKey secretKey) {
         Cipher cipher = getInstanceOfCipher(Cipher.ENCRYPT_MODE, secretKey);
 
         if (cipher != null) {
