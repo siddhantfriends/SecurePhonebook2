@@ -11,4 +11,6 @@ public interface Constants {
 
     static final int ADD_CONTACT_ACTIVITY_REQUEST = 1;
     static final int RC_LOCATION_CONTACTS_PERM = 2;
+
+    static final String EXPORT_CONTACT_FILENAME = "contact.spb";
 }

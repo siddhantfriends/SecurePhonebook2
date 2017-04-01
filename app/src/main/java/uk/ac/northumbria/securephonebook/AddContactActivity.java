@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +21,7 @@ import uk.ac.northumbria.securephonebook.helpers.DatabaseHelper;
 import uk.ac.northumbria.securephonebook.models.Group;
 
 public class AddContactActivity extends AppCompatActivity implements View.OnFocusChangeListener {
+    Toolbar toolbar;                // toolbar
     TextInputLayout firstNameText;  // first name of the contact
     TextInputLayout lastNameText;   // last name of the contact
     TextInputLayout emailText;      // email of the contact
@@ -32,6 +35,8 @@ public class AddContactActivity extends AppCompatActivity implements View.OnFocu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
+        toolbar = (Toolbar) findViewById(R.id.addContactToolbar);
+        setSupportActionBar(toolbar);
 
         // initializing variables
         firstNameText = (TextInputLayout) findViewById(R.id.firstNameText);
@@ -162,5 +167,12 @@ public class AddContactActivity extends AppCompatActivity implements View.OnFocu
         // return the result was cancelled to the previous activity
         setResult(Activity.RESULT_CANCELED);
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // adding menu to the action bar
+        getMenuInflater().inflate(R.menu.add_contact_menu, menu);
+        return true;
     }
 }

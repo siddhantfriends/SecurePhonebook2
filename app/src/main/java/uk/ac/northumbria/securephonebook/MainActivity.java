@@ -3,6 +3,9 @@ package uk.ac.northumbria.securephonebook;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +21,7 @@ import uk.ac.northumbria.securephonebook.models.Contact;
 import uk.ac.northumbria.securephonebook.models.Group;
 
 public class MainActivity extends AppCompatActivity implements Constants {
+    Toolbar toolbar;
     ListView contactsListView;
     SearchView searchView;
     DatabaseHelper db;
@@ -30,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.mainToolbar);
+        setSupportActionBar(toolbar);
 
         // initializing
         contactsListView = (ListView) findViewById(R.id.contactsListView);
@@ -144,5 +150,19 @@ public class MainActivity extends AppCompatActivity implements Constants {
         startActivityForResult(intent, ADD_CONTACT_ACTIVITY_REQUEST);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // adding items to the Action Bar
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.openContactMenu) {
+            // logic for open contact
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

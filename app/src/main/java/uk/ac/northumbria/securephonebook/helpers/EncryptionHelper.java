@@ -48,7 +48,7 @@ public class EncryptionHelper implements Constants {
         this.context = context;
 
         if (secretKeyExists(SECRET_KEY_FILENAME)) {
-            secretKey = readSecretKey(SECRET_KEY_FILENAME);
+            secretKey = readSecretKey(new File(context.getFilesDir(), SECRET_KEY_FILENAME));
         } else {
             secretKey = generateSecretKey();
             storeSecretKey(secretKey, SECRET_KEY_FILENAME);
@@ -107,14 +107,14 @@ public class EncryptionHelper implements Constants {
 
     /**
      * Takes the filename for secret.key and returns the instance of SecretKey.
-     * @param filename - The filename for the secret.key stored in the files directory.
+     * @param filePath - The filename for the secret.key stored in the files directory.
      * @return - SecretKey instance for the given secret.key file.
      */
-    protected  SecretKey readSecretKey(String filename) {
+    protected  SecretKey readSecretKey(File filePath) {
         SecretKey secretKey = null;
         FileInputStream fileIn = null;
         try {
-            fileIn = new FileInputStream(context.getFilesDir() + File.separator + filename);
+            fileIn = new FileInputStream(filePath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
