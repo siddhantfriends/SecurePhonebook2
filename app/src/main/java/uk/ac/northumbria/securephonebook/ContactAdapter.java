@@ -1,6 +1,7 @@
 package uk.ac.northumbria.securephonebook;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -70,6 +71,7 @@ public class ContactAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView textView = new TextView(context);
         textView.setText(contacts.get(position).toString());
+        textView.setTextColor(Color.BLACK);
         textView.setTextSize(20);
         return textView;
     }
