@@ -15,14 +15,14 @@ import uk.ac.northumbria.securephonebook.models.Contact;
  * Created by Siddhant on 30/03/2017.
  */
 
-public class ContentAdapter extends BaseAdapter {
+public class ContactAdapter extends BaseAdapter {
     private Context context;    // context of the application
     private ArrayList<Contact> contacts;    // ArrayList of Contact
 
     /**
      * Removing the default constructor because we need contacts to be passed to it.
      */
-    private ContentAdapter() {}
+    private ContactAdapter() {}
 
     /**
      * Constructor for Content Adapter. Requires to be initialized with application context and
@@ -30,14 +30,14 @@ public class ContentAdapter extends BaseAdapter {
      * @param context - Application Context.
      * @param contacts - ArrayList of Contact.
      */
-    public ContentAdapter(Context context, ArrayList<Contact> contacts) {
+    public ContactAdapter(Context context, ArrayList<Contact> contacts) {
         this.context = context;
         this.contacts = contacts;
     }
 
     /**
-     * Overriding the getCount method. Returns total number of contacts.
-     * @return - Total number of contacts.
+     * Overriding the getCount method. Returns total numberText of contacts.
+     * @return - Total numberText of contacts.
      */
     @Override
     public int getCount() {

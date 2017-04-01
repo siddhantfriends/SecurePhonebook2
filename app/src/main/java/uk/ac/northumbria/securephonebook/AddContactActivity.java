@@ -6,19 +6,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import uk.ac.northumbria.securephonebook.helpers.DatabaseHelper;
+import uk.ac.northumbria.securephonebook.models.Group;
 
 public class AddContactActivity extends AppCompatActivity implements View.OnFocusChangeListener {
     TextInputLayout firstNameText;  // first name of the contact
     TextInputLayout lastNameText;   // last name of the contact
     TextInputLayout emailText;      // email of the contact
-    TextInputLayout numberText;     // number of the contact
-    Button saveButton;              // save button
-    Button discardButton;           // discard bbutton
+    TextInputLayout numberText;     // numberText of the contact
+    Spinner groupSpinner;           // dropdown to display groups
+    private int groupId = 1;        // defaults group to home
+    ArrayAdapter groupsAdapter;     // responsible for displaying groups.
+    DatabaseHelper dbHelper;        // database helper
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +38,7 @@ public class AddContactActivity extends AppCompatActivity implements View.OnFocu
         lastNameText = (TextInputLayout) findViewById(R.id.lastNameText);
         emailText = (TextInputLayout) findViewById(R.id.emailText);
         numberText = (TextInputLayout) findViewById(R.id.numberText);
-        Button saveButton = (Button) findViewById(R.id.saveButton);
-        Button discardButton = (Button) findViewById(R.id.discardButton);
+        groupSpinner = (Spinner) findViewById(R.id.groupSpinner);
 
         // setting listeners for interactivity (error validation)
         firstNameText.getEditText().setOnFocusChangeListener(this);
@@ -39,35 +46,24 @@ public class AddContactActivity extends AppCompatActivity implements View.OnFocu
         emailText.getEditText().setOnFocusChangeListener(this);
         numberText.getEditText().setOnFocusChangeListener(this);
 
+        // populating the group spinner
+        dbHelper = new DatabaseHelper(this);
+        ArrayList<Group> groups = dbHelper.getAllGroups();
+        groupsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groups);
+        groupSpinner.setAdapter(groupsAdapter);
 
-        // save button
-        saveButton.setOnClickListener(new View.OnClickListener() {
+
+        // group spinner listener
+        groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                // validate input and if valided continue else display error
-                if (validate()) {
-                    // everything is valid at this phase
-                    // save to database
-                    DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
-                    dbHelper.insertContact(
-                            firstNameText.getEditText().getText().toString(),
-                            lastNameText.getEditText().getText().toString(),
-                            emailText.getEditText().getText().toString(),
-                            numberText.getEditText().getText().toString());
-                    // return the result was ok to the previous activity
-                    setResult(Activity.RESULT_OK);
-                    finish();
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Group group = (Group) parent.getItemAtPosition(position);
+                groupId = group.getId();
             }
-        });
 
-        // discard button
-        discardButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // return the result was cancelled to the previous activity
-                setResult(Activity.RESULT_CANCELED);
-                finish();
+            public void onNothingSelected(AdapterView<?> parent) {
+                groupId = 0;
             }
         });
 
@@ -84,9 +80,9 @@ public class AddContactActivity extends AppCompatActivity implements View.OnFocu
     }
 
     /**
-     * Validation for the number.
+     * Validation for the numberText.
      * @param number - Number to be validated.
-     * @return - true if the number is valid else false.
+     * @return - true if the numberText is valid else false.
      */
     private boolean isNumberValid(CharSequence number) {
         return Patterns.PHONE.matcher(number).matches();
@@ -117,10 +113,10 @@ public class AddContactActivity extends AppCompatActivity implements View.OnFocu
             return false;
         } else emailText.setError(null);
 
-        // phone number validation
-        if (numberText.getEditText().getText().toString().trim().isEmpty() ||       // The phone number is empty
-                !isNumberValid(numberText.getEditText().getText().toString().trim())) {     // the phone number is not valid
-            numberText.setError("Please enter a valid number.");
+        // phone numberText validation
+        if (numberText.getEditText().getText().toString().trim().isEmpty() ||       // The phone numberText is empty
+                !isNumberValid(numberText.getEditText().getText().toString().trim())) {     // the phone numberText is not valid
+            numberText.setError("Please enter a valid numberText.");
             return false;
         } else numberText.setError(null);
 
@@ -135,5 +131,36 @@ public class AddContactActivity extends AppCompatActivity implements View.OnFocu
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (!hasFocus) validate();
+    }
+
+    /**
+     * OnClickListener for save button.
+     * @param v - View passed by the parent class.
+     */
+    public void onSave(View v) {
+        // validate input and if valided continue else display error
+        if (validate()) {
+            // everything is valid at this phase
+            // save to database
+            DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+            dbHelper.insertContact(
+                    firstNameText.getEditText().getText().toString(),
+                    lastNameText.getEditText().getText().toString(),
+                    emailText.getEditText().getText().toString(),
+                    numberText.getEditText().getText().toString(), Integer.toString(groupId));
+            // return the result was ok to the previous activity
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
+    }
+
+    /**
+     * OnClickListener for discard button.
+     * @param v - View passed by the parent class.
+     */
+    public void onDiscard(View v) {
+        // return the result was cancelled to the previous activity
+        setResult(Activity.RESULT_CANCELED);
+        finish();
     }
 }

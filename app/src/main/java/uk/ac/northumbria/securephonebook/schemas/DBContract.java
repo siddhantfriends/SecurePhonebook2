@@ -21,7 +21,12 @@ public final class DBContract {
         public static final String COLUMN_LAST_NAME = "last_name";
         public static final String COLUMN_EMAIL = "email";
         public static final String COLUMN_NUMBER = "number";
+        public static final String COLUMN_GROUP_ID = "group_id";
+    }
 
+    public static class GroupContract implements  BaseColumns {
+        public static final String TABLE_NAME = "groups";
+        public static final String COLUMN_GROUP_NAME = "group_name";
     }
 
 }
