@@ -1,17 +1,22 @@
 package uk.ac.northumbria.securephonebook;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -48,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
         // Populating group spinner
         ArrayList<Group> displayGroup = db.getAllGroups();
         displayGroup.add(0, new Group(-1, "Contact Group - (All Contacts)"));
-        ArrayAdapter groupsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, displayGroup);
+        GroupAdapter groupsAdapter = new GroupAdapter(this, android.R.layout.simple_spinner_dropdown_item, displayGroup);
+
         groupSpinner.setAdapter(groupsAdapter);
 
         // setting listeners

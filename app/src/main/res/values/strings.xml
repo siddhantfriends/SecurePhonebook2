@@ -6,4 +6,5 @@
         Localizing them in strings.xml creates a single object.
     -->
     <string name="app_name">Secure Phonebook</string>
+    <string name="title_activity_email_contact">EmailContactActivity</string>
 </resources>

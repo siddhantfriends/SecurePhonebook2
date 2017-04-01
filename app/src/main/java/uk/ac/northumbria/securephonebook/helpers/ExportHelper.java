@@ -2,6 +2,7 @@ package uk.ac.northumbria.securephonebook.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.util.Base64;
 
 import org.json.JSONException;
@@ -65,20 +66,22 @@ public class ExportHelper implements Constants {
         }
 
         // save the output file
-        FileOutputStream fos = null;
+        FileOutputStream outputStream;
         try {
-            fos = context.openFileOutput(EXPORT_CONTACT_FILENAME, Context.MODE_PRIVATE);
-        } catch (FileNotFoundException e) {
+            // writing the secret key to the external storage.;
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), EXPORT_CONTACT_FILENAME);
+            if (file != null) {
+                file.delete();
+            }
+            outputStream = new FileOutputStream(file);
+            outputStream.write(jsonContact.toString().getBytes());
+            outputStream.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        if (fos != null) {
-            try {
-                fos.write(jsonContact.toString().getBytes());
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+
+
+
 
     }
 

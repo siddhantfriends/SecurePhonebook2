@@ -21,6 +21,7 @@ import android.widget.TextView;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class ViewContactActivity extends AppCompatActivity implements Constants {
+    Intent intent;                  // intent of the app
     Toolbar toolbar;                // toolbar
     TextView firstNameText;         // First name of the contact
     TextView lastNameText;          // Last name of the contact
@@ -43,7 +44,7 @@ public class ViewContactActivity extends AppCompatActivity implements Constants 
         contactGroupText = (TextView) findViewById(R.id.contactGroupText);
 
         // displaying data
-        Intent intent = getIntent();
+        intent = getIntent();
         firstNameText.setText(intent.getStringExtra("first_name"));
         lastNameText.setText(intent.getStringExtra("last_name"));
         emailText.setText(intent.getStringExtra("email"));
@@ -61,7 +62,7 @@ public class ViewContactActivity extends AppCompatActivity implements Constants 
                     "Kindly accept the permissions.", RC_LOCATION_CONTACTS_PERM, permissions);
         }
 
-        // verifiying that the user has granted permissions
+        // verifying that the user has granted permissions
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + numberText.getText().toString()));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -77,7 +78,7 @@ public class ViewContactActivity extends AppCompatActivity implements Constants 
         // Coloring the email icon
         Drawable drawable = menu.findItem(R.id.emailMenu).getIcon();
         drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.colorAccent));
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
         menu.findItem(R.id.emailMenu).setIcon(drawable);
 
         return true;
@@ -86,7 +87,11 @@ public class ViewContactActivity extends AppCompatActivity implements Constants 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.emailMenu) {
-            // logic for email
+            // open email contact activity
+            Intent emailContactActivityIntent = new Intent(this, EmailContactActivity.class);
+            Bundle bundle = intent.getExtras();
+            emailContactActivityIntent.putExtra("contact_bundle", bundle);
+            startActivity(emailContactActivityIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
