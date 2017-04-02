@@ -28,7 +28,11 @@
         <activity android:name=".AddContactActivity" />
         <activity android:name=".ViewContactActivity" />
         <activity android:name=".EmailContactActivity" />
-        <activity android:name=".OpenReceivedContactActivity"></activity>
+        <activity android:name=".OpenReceivedContactActivity" />
+
+        <service
+            android:name=".FileTransferService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
