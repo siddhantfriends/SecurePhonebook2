@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +27,8 @@
         </activity>
         <activity android:name=".AddContactActivity" />
         <activity android:name=".ViewContactActivity" />
-        <activity android:name=".EmailContactActivity"></activity>
+        <activity android:name=".EmailContactActivity" />
+        <activity android:name=".OpenReceivedContactActivity"></activity>
     </application>
 
 </manifest>

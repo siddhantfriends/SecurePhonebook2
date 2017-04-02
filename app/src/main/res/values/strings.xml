@@ -7,4 +7,5 @@
     -->
     <string name="app_name">Secure Phonebook</string>
     <string name="title_activity_email_contact">EmailContactActivity</string>
+    <string name="title_activity_open_received_contact">OpenReceivedContactActivity</string>
 </resources>
