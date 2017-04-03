@@ -20,14 +20,14 @@ import uk.ac.northumbria.securephonebook.models.Contact;
 import uk.ac.northumbria.securephonebook.models.Group;
 
 public class MainActivity extends AppCompatActivity implements Constants {
-    Toolbar toolbar;
-    ListView contactsListView;
-    SearchView searchView;
-    DatabaseHelper db;
-    ArrayList<Contact> contacts;
-    ArrayList<Group> groups;
-    Spinner groupSpinner;
-    int selectedGroupId = -1;
+    Toolbar toolbar;            // toolbar
+    ListView contactsListView;  // list of all the contacts
+    SearchView searchView;      // search view for searching
+    DatabaseHelper db;          // instance of DatabaseHelper
+    ArrayList<Contact> contacts;    // ArrayList of Contact
+    ArrayList<Group> groups;        // ArrayList of Group
+    Spinner groupSpinner;           // Groups list
+    int selectedGroupId = -1;       // the default group id is -1 which is All Contacts
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
