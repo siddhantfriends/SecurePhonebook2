@@ -2,9 +2,7 @@ package uk.ac.northumbria.securephonebook.schemas;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by Siddhant on 30/03/2017.
- */
+
 
 public final class DBContract {
 

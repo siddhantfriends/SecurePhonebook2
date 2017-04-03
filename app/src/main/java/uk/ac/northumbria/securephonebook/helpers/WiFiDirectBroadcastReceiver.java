@@ -18,9 +18,7 @@ import java.util.Collection;
 
 import uk.ac.northumbria.securephonebook.OpenReceivedContactActivity;
 
-/**
- * Created by Siddhant on 02/04/2017.
- */
+
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver implements PeerListListener {
     private WifiP2pManager wifiP2pManager;

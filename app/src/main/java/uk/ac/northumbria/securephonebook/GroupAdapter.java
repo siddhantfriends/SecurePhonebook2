@@ -17,9 +17,7 @@ import java.util.List;
 
 import uk.ac.northumbria.securephonebook.models.Group;
 
-/**
- * Created by Siddhant on 01/04/2017.
- */
+
 
 public class GroupAdapter<T> extends ArrayAdapter<T> {
 

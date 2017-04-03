@@ -12,9 +12,7 @@ import uk.ac.northumbria.securephonebook.models.Contact;
 import uk.ac.northumbria.securephonebook.models.Group;
 import uk.ac.northumbria.securephonebook.schemas.DBContract;
 
-/**
- * Created by Siddhant on 30/03/2017.
- */
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 

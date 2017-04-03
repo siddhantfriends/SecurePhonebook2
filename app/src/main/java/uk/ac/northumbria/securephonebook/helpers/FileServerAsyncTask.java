@@ -19,9 +19,7 @@ import java.net.Socket;
 
 import uk.ac.northumbria.securephonebook.Constants;
 
-/**
- * Created by Siddhant on 02/04/2017.
- */
+
 
 public class FileServerAsyncTask extends AsyncTask implements Constants {
 

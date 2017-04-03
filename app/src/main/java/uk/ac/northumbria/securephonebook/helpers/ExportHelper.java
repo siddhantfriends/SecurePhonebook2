@@ -17,9 +17,7 @@ import java.io.IOException;
 import uk.ac.northumbria.securephonebook.Constants;
 import uk.ac.northumbria.securephonebook.models.Contact;
 
-/**
- * Created by Siddhant on 01/04/2017.
- */
+
 
 public class ExportHelper implements Constants {
     private Context context;        // Context of the application

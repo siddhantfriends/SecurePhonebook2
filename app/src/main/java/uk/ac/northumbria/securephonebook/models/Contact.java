@@ -1,8 +1,6 @@
 package uk.ac.northumbria.securephonebook.models;
 
-/**
- * Created by Siddhant on 30/03/2017.
- */
+
 
 public class Contact {
 

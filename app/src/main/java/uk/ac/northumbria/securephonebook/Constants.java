@@ -1,8 +1,6 @@
 package uk.ac.northumbria.securephonebook;
 
-/**
- * Created by Siddhant on 30/03/2017.
- */
+
 
 public interface Constants {
     static final String ENCRYPTION_ALGORITHM  = "AES";

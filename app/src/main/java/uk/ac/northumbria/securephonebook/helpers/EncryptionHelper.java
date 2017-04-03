@@ -31,9 +31,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import uk.ac.northumbria.securephonebook.Constants;
 
-/**
- * Created by Siddhant on 29/03/2017.
- */
+
 
 public class EncryptionHelper implements Constants {
     private Context context;
